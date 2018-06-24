@@ -4,13 +4,18 @@ namespace bfdotnet
 {
     class Program
     {
-        byte[] workspace;
-        int spacePointer;
+        static byte[] workspace;
+        static int spacePointer;
+
+        static string testProgram = "++++>+++>++>+<<<";
 
         static void Main(string[] args)
         {
 
             Console.WriteLine("Hello Brainfuck");
+            Initialisation(20);
+            Console.WriteLine("Inicialisation with pointer on {0} and workspace with size of {1} bytes", spacePointer, workspace.Length);
+
 
 
 
@@ -26,7 +31,8 @@ namespace bfdotnet
 
         internal static void Initialisation(int workspaceSize)
         {
-            //TODO: Initialise all necessary components.
+            spacePointer = 0;
+            workspace = new byte[workspaceSize];
         }
 
         internal static string prepareProgram()
@@ -42,7 +48,11 @@ namespace bfdotnet
 
         internal static void ExecuteProgram(string program)
         {
-            //BF program execution
+            foreach( char c in program)
+            {
+
+            }
+
         }
 
     }
