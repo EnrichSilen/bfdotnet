@@ -3,6 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Enrich Silen</Authors>
+    <Company />
+    <Description>bfdotnet or BrainFu*k .NET is C# interpreter of BrainFu*k esoteric lang</Description>
+    <PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/EnrichSilen/bfdotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/EnrichSilen/bfdotnet</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

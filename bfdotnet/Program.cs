@@ -1,5 +1,6 @@
 ﻿ using System;
  using System.Text;
+ using System.Reflection;
 
 namespace bfdotnet
 {
@@ -9,20 +10,21 @@ namespace bfdotnet
         static int memoryPtr;
 
         static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+#if DEBUG
+        static string buildType = "Debug";
+#else
+        static string buildType = "Release"; 
+#endif
 
         static void Main(string[] args)
         {
+            string test = typeof(Program).Assembly.GetName().Version.ToString();
+            
+            Console.WriteLine("BrainFu*k.NET ver." + test +" "+ buildType + " build");
+            Initialisation(3000);
+            Console.WriteLine("VM inicialised with memory size of {0} bytes", memory.Length);
 
-            Console.WriteLine("Hello Brainfuck");
-            Initialisation(20);
-            Console.WriteLine("Inicialisation with pointer on {0} and memory with size of {1} bytes", memoryPtr, memory.Length);
-            ExecuteProgram(testProgram);
-
-            //printMemory();
-
-
-
-
+            
             Console.ReadLine();
         }
 
@@ -66,6 +68,14 @@ namespace bfdotnet
             }
         }
 
+        internal void InteractiveLoop()
+        {
+            while(true)
+            {
+                //TODO: infinite REP loop
+            }
+        }
+
         internal static void ExecuteProgram(string program)
         {
             for (int i = 0; i < program.Length; i++)
@@ -85,7 +95,6 @@ namespace bfdotnet
                         memoryPtr--;
                         break;
                     case '.':
-                        Console.WriteLine("");
                         Console.Write(Encoding.ASCII.GetString(new byte[] { memory[memoryPtr] }));
                         break;
                     case ',':
