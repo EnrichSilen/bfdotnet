@@ -21,9 +21,10 @@ namespace bfdotnet
             string test = typeof(Program).Assembly.GetName().Version.ToString();
             
             Console.WriteLine("BrainFu*k.NET ver." + test +" "+ buildType + " build");
-            Initialisation(3000);
+            Initialisation(200);
             Console.WriteLine("VM inicialised with memory size of {0} bytes", memory.Length);
 
+            printMemory();
             
             Console.ReadLine();
         }
@@ -62,10 +63,44 @@ namespace bfdotnet
             Console.Clear();
             Console.WriteLine("Printing content of memory");
 
-            foreach (var cell in memory)
+            //foreach (var cell in memory)
+            //{
+            //    Console.Write(cell.ToString() + " | ");    
+            //}
+
+            int lines = memory.Length / 10;
+            int counter = 0;
+
+            for (int i = 1; i <= lines; i++)
             {
-                Console.Write(cell.ToString() + " | ");    
+                for (int l = 0; l < 10; l++)
+                {
+                    Console.Write(normalizeValue(memory[counter]) + " ");
+                    counter++;
+                }
+                counter -= 10;
+                Console.Write("\t\t");
+                for (int l = 0; l < 10; l++)
+                {
+                    if (memory[counter] > 31 && memory[counter] < 127)
+                        Console.Write(Encoding.ASCII.GetString(new byte[] { memory[counter] }) + " ");
+                    else
+                        Console.Write(". ");
+                    counter++;
+                }
+                Console.Write("\n");
             }
+            
+        }
+
+        internal static string normalizeValue(byte value)
+        {
+            if (value < 10)
+                return "00" + value.ToString();
+            else if (value < 100)
+                return "0" + value.ToString();
+            else
+                return value.ToString();
         }
 
         internal void InteractiveLoop()
