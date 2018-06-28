@@ -10,21 +10,18 @@ namespace bfdotnet
         static int memoryPtr;
 
         static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
-#if DEBUG
-        static string buildType = "Debug";
-#else
-        static string buildType = "Release"; 
-#endif
+        
+
 
         static void Main(string[] args)
         {
-            string test = typeof(Program).Assembly.GetName().Version.ToString();
-            
-            Console.WriteLine("BrainFu*k.NET ver." + test +" "+ buildType + " build");
             Initialisation(200);
-            Console.WriteLine("VM inicialised with memory size of {0} bytes", memory.Length);
 
-            printMemory();
+            Utils.printProgramHead(memory.Length);
+
+            //Utils.MemoryDump(memory);
+            InteractiveLoop();
+            
             
             Console.ReadLine();
         }
@@ -58,58 +55,54 @@ namespace bfdotnet
             //TODO: handling params and program flow
         }
 
-        internal static void printMemory()
+
+        internal static void InteractiveLoop()
         {
-            Console.Clear();
-            Console.WriteLine("Printing content of memory");
-
-            //foreach (var cell in memory)
-            //{
-            //    Console.Write(cell.ToString() + " | ");    
-            //}
-
-            int lines = memory.Length / 10;
-            int counter = 0;
-
-            for (int i = 1; i <= lines; i++)
-            {
-                for (int l = 0; l < 10; l++)
-                {
-                    Console.Write(normalizeValue(memory[counter]) + " ");
-                    counter++;
-                }
-                counter -= 10;
-                Console.Write("\t\t");
-                for (int l = 0; l < 10; l++)
-                {
-                    if (memory[counter] > 31 && memory[counter] < 127)
-                        Console.Write(Encoding.ASCII.GetString(new byte[] { memory[counter] }) + " ");
-                    else
-                        Console.Write(". ");
-                    counter++;
-                }
-                Console.Write("\n");
-            }
-            
-        }
-
-        internal static string normalizeValue(byte value)
-        {
-            if (value < 10)
-                return "00" + value.ToString();
-            else if (value < 100)
-                return "0" + value.ToString();
-            else
-                return value.ToString();
-        }
-
-        internal void InteractiveLoop()
-        {
+            int liner = 0;
             while(true)
             {
-                //TODO: infinite REP loop
+                Console.Write("[{0}]: ", liner);
+                codeEval(Console.ReadLine());
+
+                liner++;
             }
         }
+
+        internal static void codeEval(string text)
+        {
+            if (text.Length == 0)
+                return;
+
+            if(text[0] == '#')
+            {
+                switch(text.ToLower())
+                {
+                    case "#exit":
+                        Environment.Exit(0);
+                        break;
+                    case "#dump":
+                        Utils.MemoryDump(memory);
+                        break;
+                    case "#clear":
+                        Console.Clear();
+                        break;
+                    case "#head":
+                        Utils.printProgramHead(memory.Length);
+                        break;
+
+
+                    default:
+                        Console.WriteLine("Unknown command " + text + "");
+                        break;
+
+                }
+            }
+            else
+            {
+                ExecuteProgram(text);
+            }
+        }
+
 
         internal static void ExecuteProgram(string program)
         {
@@ -136,7 +129,6 @@ namespace bfdotnet
                         memory[memoryPtr] = byte.Parse(Console.ReadLine());
                         break;
                     case '[':
-
                         if (memory[memoryPtr] == 0)
                         {
                             int skip = 0;
@@ -177,6 +169,9 @@ namespace bfdotnet
                             }
                         }
                         break;
+
+                    //ignores all non program chars
+                    default: break;
                 }
             }
         }
