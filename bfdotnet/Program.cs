@@ -8,6 +8,7 @@ namespace bfdotnet
     {
         static byte[] memory;
         static int memoryPtr;
+        static int liner = 0;
 
         static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
         
@@ -58,20 +59,25 @@ namespace bfdotnet
 
         internal static void InteractiveLoop()
         {
-            int liner = 0;
+            
             while(true)
             {
                 Console.Write("[{0}]: ", liner);
                 codeEval(Console.ReadLine());
 
                 liner++;
+                Console.WriteLine();
             }
         }
 
         internal static void codeEval(string text)
         {
             if (text.Length == 0)
+            {
+                liner--;
                 return;
+            }
+                
 
             if(text[0] == '#')
             {
@@ -88,6 +94,19 @@ namespace bfdotnet
                         break;
                     case "#head":
                         Utils.printProgramHead(memory.Length);
+                        break;
+                    case "#ptr":
+                        Console.WriteLine("Memory pointer: " + memoryPtr);
+                        break;
+
+                    case"#help":
+                        Console.WriteLine(
+                            "#exit\tExit BF\n" +
+                            "#dump\tPrints memory dump\n" +
+                            "#clear\tClear shell\n" +
+                            "#head\tPrints head info\n" +
+                            "#ptr\tPrints memory pointer value"
+                            );
                         break;
 
 
