@@ -1,5 +1,6 @@
 ﻿ using System;
  using System.Text;
+ using System.Reflection;
 
 namespace bfdotnet
 {
@@ -7,22 +8,22 @@ namespace bfdotnet
     {
         static byte[] memory;
         static int memoryPtr;
+        static int liner = 0;
 
         static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+        
+
 
         static void Main(string[] args)
         {
+            Initialisation(200);
 
-            Console.WriteLine("Hello Brainfuck");
-            Initialisation(20);
-            Console.WriteLine("Inicialisation with pointer on {0} and memory with size of {1} bytes", memoryPtr, memory.Length);
-            ExecuteProgram(testProgram);
+            Utils.printProgramHead(memory.Length);
 
-            //printMemory();
-
-
-
-
+            //Utils.MemoryDump(memory);
+            InteractiveLoop();
+            
+            
             Console.ReadLine();
         }
 
@@ -55,16 +56,72 @@ namespace bfdotnet
             //TODO: handling params and program flow
         }
 
-        internal static void printMemory()
-        {
-            Console.Clear();
-            Console.WriteLine("Printing content of memory");
 
-            foreach (var cell in memory)
+        internal static void InteractiveLoop()
+        {
+            
+            while(true)
             {
-                Console.Write(cell.ToString() + " | ");    
+                Console.Write("[{0}]: ", liner);
+                codeEval(Console.ReadLine());
+
+                liner++;
+                Console.WriteLine();
             }
         }
+
+        internal static void codeEval(string text)
+        {
+            if (text.Length == 0)
+            {
+                liner--;
+                return;
+            }
+                
+
+            if(text[0] == '#')
+            {
+                switch(text.ToLower())
+                {
+                    case "#exit":
+                        Environment.Exit(0);
+                        break;
+                    case "#dump":
+                        Utils.MemoryDump(memory);
+                        break;
+                    case "#clear":
+                        Console.Clear();
+                        break;
+                    case "#head":
+                        Utils.printProgramHead(memory.Length);
+                        break;
+                    case "#ptr":
+                        Console.WriteLine("Memory pointer: " + memoryPtr);
+                        break;
+
+                    case"#help":
+                        Console.WriteLine(
+                            "#exit\tExit BF\n" +
+                            "#dump\tPrints memory dump\n" +
+                            "#clear\tClear shell\n" +
+                            "#head\tPrints head info\n" +
+                            "#ptr\tPrints memory pointer value"
+                            );
+                        break;
+
+
+                    default:
+                        Console.WriteLine("Unknown command " + text + "");
+                        break;
+
+                }
+            }
+            else
+            {
+                ExecuteProgram(text);
+            }
+        }
+
 
         internal static void ExecuteProgram(string program)
         {
@@ -85,14 +142,12 @@ namespace bfdotnet
                         memoryPtr--;
                         break;
                     case '.':
-                        Console.WriteLine("");
                         Console.Write(Encoding.ASCII.GetString(new byte[] { memory[memoryPtr] }));
                         break;
                     case ',':
                         memory[memoryPtr] = byte.Parse(Console.ReadLine());
                         break;
                     case '[':
-
                         if (memory[memoryPtr] == 0)
                         {
                             int skip = 0;
@@ -133,6 +188,9 @@ namespace bfdotnet
                             }
                         }
                         break;
+
+                    //ignores all non program chars
+                    default: break;
                 }
             }
         }
