@@ -16,12 +16,15 @@ namespace bfdotnet
 
         static void Main(string[] args)
         {
+
+            ArgsHandler(args);
+
             Initialisation(200);
 
             Utils.printProgramHead(memory.Length);
 
             //Utils.MemoryDump(memory);
-            InteractiveLoop();
+            //InteractiveLoop();
             
             
             Console.ReadLine();
@@ -53,7 +56,23 @@ namespace bfdotnet
 
         internal static void ArgsHandler(string[] args)
         {
-            //TODO: handling params and program flow
+            bool interactive = false;
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "-i":
+                        interactive = true;
+                        break;
+                    case "-m":
+                        int l;
+                        int.TryParse(args[i + 1], out l);
+                        Initialisation(l);
+                        break;
+                }
+            }
+            if(interactive)
+                InteractiveLoop();
         }
 
 
