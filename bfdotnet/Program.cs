@@ -39,15 +39,11 @@ namespace bfdotnet
             }
         }
 
-        internal static string prepareProgram()
-        {
-            //TODO: preperation of program for execution
-            return "";
-        }
 
         internal static void ArgsHandler(string[] args)
         {
             bool interactive = true;
+            int memorySize = 200;
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
@@ -57,9 +53,8 @@ namespace bfdotnet
                         //loading code from sourse
                         break;
                     case "-m":
-                        int l = 200;
-                        int.TryParse(args[i + 1], out l);
-                        Initialisation(l);
+                        int.TryParse(args[i + 1], out memorySize);
+                        
                         break;
 
                     default:
@@ -67,15 +62,17 @@ namespace bfdotnet
                         break;
                 }
             }
-            if(interactive)
+            Initialisation(memorySize);
+            if (interactive)
                 InteractiveLoop();
+            else
+                PassthroughExecution();
         }
 
 
         internal static void InteractiveLoop()
         {
-            if (memory == null)
-                Initialisation(200);
+            
             Utils.printProgramHead(memory.Length);
 
             while (true)
@@ -87,6 +84,12 @@ namespace bfdotnet
                 Console.WriteLine();
             }
         }
+
+        internal static void PassthroughExecution()
+        {
+            //TODO: single program execution
+        }
+
 
         internal static void codeEval(string text)
         {
