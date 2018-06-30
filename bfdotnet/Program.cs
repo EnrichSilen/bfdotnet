@@ -16,21 +16,12 @@ namespace bfdotnet
 
         static void Main(string[] args)
         {
-
             ArgsHandler(args);
 
-            Initialisation(200);
-
-            Utils.printProgramHead(memory.Length);
-
-            //Utils.MemoryDump(memory);
-            //InteractiveLoop();
-            
-            
             Console.ReadLine();
         }
 
-        internal static char[] loadSource()
+        internal static char[] loadSource(string path)
         {
             //TODO: loading source from file
             return new char[1];
@@ -56,18 +47,23 @@ namespace bfdotnet
 
         internal static void ArgsHandler(string[] args)
         {
-            bool interactive = false;
+            bool interactive = true;
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
                 {
-                    case "-i":
-                        interactive = true;
+                    case "-l":
+                        interactive = false;
+                        //loading code from sourse
                         break;
                     case "-m":
-                        int l;
+                        int l = 200;
                         int.TryParse(args[i + 1], out l);
                         Initialisation(l);
+                        break;
+
+                    default:
+                        loadSource(args[i]);
                         break;
                 }
             }
@@ -78,8 +74,11 @@ namespace bfdotnet
 
         internal static void InteractiveLoop()
         {
-            
-            while(true)
+            if (memory == null)
+                Initialisation(200);
+            Utils.printProgramHead(memory.Length);
+
+            while (true)
             {
                 Console.Write("[{0}]: ", liner);
                 codeEval(Console.ReadLine());
