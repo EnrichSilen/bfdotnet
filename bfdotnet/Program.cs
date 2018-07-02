@@ -31,6 +31,7 @@ namespace bfdotnet
         {
             memoryPtr = 0;
             memory = new byte[workspaceSize];
+            ProgramInfo.memorySize = memory.Length;
 
             //Init of warkspace to 0.
             for (int i = 0; i < memory.Length; i++)
@@ -44,6 +45,7 @@ namespace bfdotnet
         {
             bool interactive = true;
             int memorySize = 200;
+
             for (int i = 0; i < args.Length; i++)
             {
                 switch (args[i])
@@ -54,7 +56,6 @@ namespace bfdotnet
                         break;
                     case "-m":
                         int.TryParse(args[i + 1], out memorySize);
-                        
                         break;
 
                     default:
@@ -114,7 +115,7 @@ namespace bfdotnet
                         Console.Clear();
                         break;
                     case "#head":
-                        Utils.printProgramHead(memory.Length);
+                        Utils.printProgramHead();
                         break;
                     case "#ptr":
                         Console.WriteLine("Memory pointer: " + memoryPtr);

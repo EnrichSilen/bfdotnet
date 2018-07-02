@@ -51,7 +51,7 @@ namespace bfdotnet
                 return value.ToString();
         }
 
-        internal static void printProgramHead(int memoryLenght)
+        internal static void printProgramHead()
         {
 
 #if DEBUG
@@ -60,7 +60,7 @@ namespace bfdotnet
             string buildType = "Release"; 
 #endif
 
-            Console.WriteLine("BrainFu*k.NET ver." + ProgramInfo.version + " " + buildType + " \nVM inicialised with memory size of " + memoryLenght + " bytes");
+            Console.WriteLine("BrainFu*k.NET ver." + ProgramInfo.version + " " + buildType + " \nVM inicialised with memory size of " + ProgramInfo.memorySize + " bytes");
         }
     }
 }
