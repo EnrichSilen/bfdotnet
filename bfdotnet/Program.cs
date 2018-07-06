@@ -74,12 +74,12 @@ namespace bfdotnet
         internal static void InteractiveLoop()
         {
             
-            Utils.printProgramHead(memory.Length);
+            Utils.printProgramHead();
 
             while (true)
             {
                 Console.Write("[{0}]: ", liner);
-                codeEval(Console.ReadLine());
+                inputEval(Console.ReadLine());
 
                 liner++;
                 Console.WriteLine();
@@ -92,7 +92,7 @@ namespace bfdotnet
         }
 
 
-        internal static void codeEval(string text)
+        internal static void inputEval(string text)
         {
             if (text.Length == 0)
             {
@@ -114,19 +114,23 @@ namespace bfdotnet
                     case "#clear":
                         Console.Clear();
                         break;
-                    case "#head":
+                    case "#info":
                         Utils.printProgramHead();
                         break;
                     case "#ptr":
                         Console.WriteLine("Memory pointer: " + memoryPtr);
                         break;
+                    case "#reboot":
+                        Initialisation(ProgramInfo.memorySize);
+                        break;
 
-                    case"#help":
+                    case "#help":
                         Console.WriteLine(
                             "#exit\tExit BF\n" +
                             "#dump\tPrints memory dump\n" +
+                            "#reboot\tReboots VM" +
                             "#clear\tClear shell\n" +
-                            "#head\tPrints head info\n" +
+                            "#info\tPrints VM info\n" +
                             "#ptr\tPrints memory pointer value"
                             );
                         break;
