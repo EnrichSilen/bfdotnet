@@ -1,6 +1,7 @@
 ﻿ using System;
  using System.Text;
  using System.Reflection;
+using System.IO;
 
 namespace bfdotnet
 {
@@ -11,20 +12,19 @@ namespace bfdotnet
         static int liner = 0;
 
         static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+        static string program = string.Empty;
         
 
 
         static void Main(string[] args)
         {
             ArgsHandler(args);
-
             Console.ReadLine();
         }
 
-        internal static char[] loadSource(string path)
+        internal static void loadSource(string path)
         {
-            //TODO: loading source from file
-            return new char[1];
+            program = File.ReadAllText(path);
         }
 
         internal static void Initialisation(int workspaceSize)
@@ -33,7 +33,7 @@ namespace bfdotnet
             memory = new byte[workspaceSize];
             ProgramInfo.memorySize = memory.Length;
 
-            //Init of warkspace to 0.
+            //Init of workspace to 0.
             for (int i = 0; i < memory.Length; i++)
             {
                 memory[i] = 0;
@@ -59,6 +59,7 @@ namespace bfdotnet
                         break;
 
                     default:
+                        interactive = false;
                         loadSource(args[i]);
                         break;
                 }
@@ -88,7 +89,7 @@ namespace bfdotnet
 
         internal static void PassthroughExecution()
         {
-            //TODO: single program execution
+            ExecuteProgram(program);
         }
 
 
