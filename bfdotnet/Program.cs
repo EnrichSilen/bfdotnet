@@ -125,7 +125,7 @@ namespace bfdotnet
                         Console.WriteLine(
                             "#exit\tExit BF\n" +
                             "#dump\tPrints memory dump\n" +
-                            "#reboot\tReboots VM" +
+                            "#reboot\tReboots VM\n" +
                             "#clear\tClear shell\n" +
                             "#info\tPrints VM info\n" +
                             "#ptr\tPrints memory pointer value"
