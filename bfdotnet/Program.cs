@@ -50,10 +50,6 @@ namespace bfdotnet
             {
                 switch (args[i])
                 {
-                    case "-l":
-                        interactive = false;
-                        //loading code from sourse
-                        break;
                     case "-m":
                         int.TryParse(args[i + 1], out memorySize);
                         break;
