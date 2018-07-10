@@ -51,16 +51,16 @@ namespace bfdotnet
                 return value.ToString();
         }
 
-        internal static void printProgramHead(int memoryLenght)
+        internal static void printProgramHead()
         {
 
 #if DEBUG
-            string buildType = "Debug";
+            string buildType = "Debug build";
 #else
             string buildType = "Release"; 
 #endif
 
-            Console.WriteLine("BrainFu*k.NET ver." + typeof(Program).Assembly.GetName().Version.ToString() + " " + buildType + " build\nVM inicialised with memory size of " + memoryLenght + " bytes");
+            Console.WriteLine("BrainFu*k.NET ver." + ProgramInfo.version + " " + buildType + " \nVM inicialised with memory size of " + ProgramInfo.memorySize + " bytes");
         }
     }
 }

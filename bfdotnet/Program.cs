@@ -1,6 +1,7 @@
 ﻿ using System;
  using System.Text;
  using System.Reflection;
+using System.IO;
 
 namespace bfdotnet
 {
@@ -10,67 +11,79 @@ namespace bfdotnet
         static int memoryPtr;
         static int liner = 0;
 
-        static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+        // Hello world = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+        static string program = string.Empty;
         
 
 
         static void Main(string[] args)
         {
-            Initialisation(200);
-
-            Utils.printProgramHead(memory.Length);
-
-            //Utils.MemoryDump(memory);
-            InteractiveLoop();
-            
-            
+            ArgsHandler(args);
             Console.ReadLine();
         }
 
-        internal static char[] loadSource()
+        internal static void loadSource(string path)
         {
-            //TODO: loading source from file
-            return new char[1];
+            program = File.ReadAllText(path);
         }
 
         internal static void Initialisation(int workspaceSize)
         {
             memoryPtr = 0;
             memory = new byte[workspaceSize];
+            ProgramInfo.memorySize = memory.Length;
 
-            //Init of warkspace to 0.
+            //Init of workspace to 0.
             for (int i = 0; i < memory.Length; i++)
             {
                 memory[i] = 0;
             }
         }
 
-        internal static string prepareProgram()
-        {
-            //TODO: preperation of program for execution
-            return "";
-        }
 
         internal static void ArgsHandler(string[] args)
         {
-            //TODO: handling params and program flow
+            bool interactive = true;
+            int memorySize = 200;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "-m":
+                        int.TryParse(args[i + 1], out memorySize);
+                        break;
+
+                    default:
+                        interactive = false;
+                        loadSource(args[i]);
+                        break;
+                }
+            }
+            Initialisation(memorySize);
+            if (interactive)
+                InteractiveLoop();
+            else
+                ExecuteProgram(program);
         }
 
 
         internal static void InteractiveLoop()
         {
             
-            while(true)
+            Utils.printProgramHead();
+
+            while (true)
             {
                 Console.Write("[{0}]: ", liner);
-                codeEval(Console.ReadLine());
+                inputEval(Console.ReadLine());
 
                 liner++;
                 Console.WriteLine();
             }
         }
 
-        internal static void codeEval(string text)
+        internal static void inputEval(string text)
         {
             if (text.Length == 0)
             {
@@ -92,19 +105,23 @@ namespace bfdotnet
                     case "#clear":
                         Console.Clear();
                         break;
-                    case "#head":
-                        Utils.printProgramHead(memory.Length);
+                    case "#info":
+                        Utils.printProgramHead();
                         break;
                     case "#ptr":
                         Console.WriteLine("Memory pointer: " + memoryPtr);
                         break;
+                    case "#reboot":
+                        Initialisation(ProgramInfo.memorySize);
+                        break;
 
-                    case"#help":
+                    case "#help":
                         Console.WriteLine(
                             "#exit\tExit BF\n" +
                             "#dump\tPrints memory dump\n" +
+                            "#reboot\tReboots VM\n" +
                             "#clear\tClear shell\n" +
-                            "#head\tPrints head info\n" +
+                            "#info\tPrints VM info\n" +
                             "#ptr\tPrints memory pointer value"
                             );
                         break;
