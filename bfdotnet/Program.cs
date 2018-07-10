@@ -11,7 +11,7 @@ namespace bfdotnet
         static int memoryPtr;
         static int liner = 0;
 
-        static string testProgram = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
+        // Hello world = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.<<+.<.";
         static string program = string.Empty;
         
 
@@ -64,7 +64,7 @@ namespace bfdotnet
             if (interactive)
                 InteractiveLoop();
             else
-                PassthroughExecution();
+                ExecuteProgram(program);
         }
 
 
@@ -82,12 +82,6 @@ namespace bfdotnet
                 Console.WriteLine();
             }
         }
-
-        internal static void PassthroughExecution()
-        {
-            ExecuteProgram(program);
-        }
-
 
         internal static void inputEval(string text)
         {
